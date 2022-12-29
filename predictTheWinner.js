@@ -1,25 +1,26 @@
-function Prediction(nums) {
-    if (nums.length % 2 === 0) {
-      return true;
-    }
-    let scores = [0, 0];
-    for (let index = 0; index < nums.length; index++) {
-      if (index % 2 === 0) {
-        scores[0] += nums[index];
-      } else {
-        scores[1] += nums[index];
+var PredictTheWinner = function (nums) {
+    function helper(nums, scores, player) {
+     
+      if (nums.length === 0) {
+        return scores[0] > scores[1];
       }
-    }
-    let odd = scores[0],
-      even = scores[1];
   
-    let PlayerOneFirstMove = Math.max(nums[0], nums[nums.length - 1]);
-    let PlayerTwoChoice = Math.max(odd - PlayerOneFirstMove, even);
-    let PlayerOneFinalChoose = Math.min(odd - PlayerOneFirstMove, even);
-    if (PlayerTwoChoice <= PlayerOneFirstMove + PlayerOneFinalChoose) {
-      return true;
-    } else {
-      return false;
+      let canWin = false;
+      for (let i = 0; i < nums.length; i++) {
+        scores[player] += nums[i];
+  
+  
+        let otherPlayer = (player + 1) % 2;
+        canWin = canWin || !helper(nums.slice(0, i).concat(nums.slice(i + 1)), scores, otherPlayer);
+  
+       
+        scores[player] -= nums[i];
+      }
+  
+      return canWin;
     }
+  
+  
+    return helper(nums, [0, 0], 0);
   }
   
