@@ -1,26 +1,14 @@
-var PredictTheWinner = function (nums) {
-    function helper(nums, scores, player) {
-     
-      if (nums.length === 0) {
-        return scores[0] > scores[1];
-      }
+var PredictTheWinner = function(nums) {
+    if (nums.length % 2 === 0) return true;
   
-      let canWin = false;
-      for (let i = 0; i < nums.length; i++) {
-        scores[player] += nums[i];
+    function helper(nums, l, r) {
+      if (l === r) return nums[l];
+      let a = nums[l] - helper(nums, l + 1, r);
+      let b = nums[r] - helper(nums, l, r - 1);
   
-  
-        let otherPlayer = (player + 1) % 2;
-        canWin = canWin || !helper(nums.slice(0, i).concat(nums.slice(i + 1)), scores, otherPlayer);
-  
-       
-        scores[player] -= nums[i];
-      }
-  
-      return canWin;
+      return Math.max(a, b);
     }
   
-  
-    return helper(nums, [0, 0], 0);
+    return helper(nums, 0, nums.length - 1) >= 0;
   }
   
